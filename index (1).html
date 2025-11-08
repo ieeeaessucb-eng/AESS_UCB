@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Robotic Chess – Proyecto 2025</title>
+  <meta name="description" content="Kit educativo de brazo robótico con ROS 2 para jugar ajedrez y aprender robótica, visión y PCB." />
+  <style>
+    :root{
+      /* Paleta inspirada en KUKA */
+      --bg:#0b0e12;--bg2:#0a0c10;--card:#111418;--card2:#0c0f14;--muted:#b2bdc7;--txt:#eef2f6;
+      --acc:#ff6a00;         /* KUKA orange */
+      --acc2:#ff9a3c;        /* degradado cálido */
+      --ring:#ff6a00;
+      --shadow:0 10px 30px rgba(0,0,0,.35);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;background:linear-gradient(180deg,var(--bg),var(--bg2));color:var(--txt);font:15.5px/1.6 system-ui,Segoe UI,Roboto,Arial;overflow-x:hidden}
+    a{color:var(--acc)}
+    img,video{max-width:100%;display:block}
+    /* --- NAV --- */
+    .nav{position:sticky;top:0;z-index:20;background:rgba(11,15,20,.6);backdrop-filter:blur(10px);border-bottom:1px solid rgba(255,255,255,.06)}
+    .nav .wrap{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;max-width:1100px;margin:auto}
+    .brand{display:flex;gap:10px;align-items:center}
+    .brand .dot{width:10px;height:10px;border-radius:50%;background:linear-gradient(135deg,var(--acc),var(--acc2));box-shadow:0 0 0 3px rgba(45,212,191,.2)}
+    .brand h1{font-size:16px;margin:0;font-weight:700;letter-spacing:.2px}
+    .menu{display:flex;gap:14px;flex-wrap:wrap}
+    .menu a{padding:8px 10px;border-radius:10px;color:var(--txt);text-decoration:none}
+    .menu a:hover{background:rgba(255,255,255,.06)}
+
+    /* --- HERO --- */
+    .hero{max-width:none;margin:0;padding:0;display:block}
+    .hero-card{background:transparent;border:0;border-radius:0;box-shadow:none;overflow:hidden}
+    .hero-top{display:grid;grid-template-columns:1fr;gap:0;padding:0}
+    .hero video,.hero iframe{width:100vw;height:calc(100vh - 64px);max-height:92vh;border-radius:0;border:0;box-shadow:none;object-fit:cover}
+    @media (max-width:768px){.hero video,.hero iframe{height:70vh}}
+    .hero-info{max-width:1100px;margin:16px auto 8px;padding:0 16px}
+    .hero h2{margin:6px 0 8px;font-size:28px}
+    .hero p{color:var(--muted);margin:0}
+    .kpis{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:14px}
+    .kpi{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:10px}
+    .kpi b{display:block;font-size:18px}
+
+    /* --- SECTIONS --- */
+    section{max-width:1100px;margin:32px auto;padding:0 16px}
+    .grid{display:grid;gap:16px}
+    @media (min-width:920px){.grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}}
+    .card{background:linear-gradient(180deg,var(--card),var(--card2));border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:16px;box-shadow:var(--shadow)}
+    .card h3{margin:6px 0 8px}
+    .pill{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);font-size:12.5px;color:var(--muted)}
+    ul.clean{margin:10px 0 0 0;padding-left:18px}
+    ul.clean li{margin:6px 0}
+
+    /* --- TIMELINE / ABOUT --- */
+    .about{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:center}
+    @media(max-width:900px){.about{grid-template-columns:1fr}}
+    .about .photo img{width:100%;height:100%;max-height:380px;object-fit:cover;border-radius:14px;border:1px solid rgba(255,255,255,.08);box-shadow:var(--shadow)}
+
+    .timeline{display:grid;gap:16px;grid-template-columns:1fr}
+    @media(min-width:960px){.timeline{grid-template-columns:repeat(3,1fr)}}
+    .stage{position:relative;border-radius:18px;padding:16px;background:linear-gradient(180deg,var(--card),var(--card2));border:1px solid rgba(255,255,255,.08);box-shadow:var(--shadow), inset 0 0 0 1px rgba(255,255,255,.02)}
+    .stage .stage-head span{display:inline-block;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;opacity:.95}
+    .stage.past{--accent:#98a2b3;box-shadow:var(--shadow), inset 6px 0 0 var(--accent)}
+    .stage.present{--accent:var(--acc);box-shadow:var(--shadow), inset 6px 0 0 var(--accent)}
+    .stage.future{--accent:var(--acc2);box-shadow:var(--shadow), inset 6px 0 0 var(--accent)}
+    .stage .stage-head span{color:var(--accent)}
+    .stage h4{margin:.25rem 0 .5rem}
+    .stage ul.clean{margin-top:.5rem}
+
+    /* --- GALLERY --- */
+    .gallery{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+    @media (min-width:800px){.gallery{grid-template-columns:repeat(4,1fr)}}
+    .gallery figure{margin:0;position:relative}
+    .gallery img{width:100%;height:160px;object-fit:cover;border-radius:12px;border:1px solid rgba(255,255,255,.08)}
+    .gallery figcaption{position:absolute;left:8px;bottom:8px;background:rgba(0,0,0,.45);padding:4px 8px;border-radius:8px;font-size:12px}
+
+    /* --- SLIDES --- */
+    .slides{display:grid;grid-template-columns:1fr;gap:12px}
+    .slides iframe{width:100%;aspect-ratio:4/3;border:0;border-radius:12px}
+    .download{display:flex;gap:10px;flex-wrap:wrap}
+
+    /* --- CTA / FOOTER --- */
+    .cta{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+    .btn{display:inline-block;padding:10px 14px;border-radius:12px;text-decoration:none;color:#001016;background:linear-gradient(180deg,var(--acc),var(--acc2));font-weight:700;border:0}
+    .btn.ghost{background:transparent;color:var(--txt);border:1px solid rgba(255,255,255,.18)}
+    footer{margin:40px 0 30px;color:var(--muted);text-align:center}
+
+    /* --- tiny animations --- */
+    .reveal{opacity:0;transform:translateY(8px);transition:all .6s cubic-bezier(.2,.8,.2,1)}
+    .reveal.on{opacity:1;transform:none}
+  </style>
+</head>
+<body>
+  <!-- NAVBAR -->
+  <nav class="nav">
+    <div class="wrap">
+      <div class="brand"><span class="dot"></span><h1>Robotic Chess</h1></div>
+      <div class="menu">
+        <a href="#inicio">Inicio</a>
+        <a href="#quienes">Quiénes somos</a>
+        <a href="#hicimos">Qué hicimos</a>
+        <a href="#hacemos">Qué hacemos</a>
+        <a href="#queremos">Qué queremos hacer</a>
+        <a href="#galeria">Galería</a>
+        <a href="#contacto">Contacto</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header id="inicio" class="hero">
+    <div class="hero-card reveal">
+      <div class="hero-top">
+        <div>
+          <!-- Video principal (usa el que ya tienes cargado) -->
+          <video controls autoplay muted playsinline loop poster="assets/poster.jpg">
+            <source src="assets/sce-2-2025-proyectos_lDg4pIKe.mp4" type="video/mp4" />
+            <source src="sce-2-2025-proyectos_lDg4pIKe.mp4" type="video/mp4" />
+            Tu navegador no soporta video HTML5.
+          </video>
+        </div>
+        <div class="hero-info">
+          <h2>Robotic Chess</h2>
+          <p>En un mundo que continúa su proceso de industrialización, los robots y equipos industriales se vuelven cada vez más presentes en nuestra vida cotidiana. Con esta situación en mente, se plantea un desafío cultural al incorporar una herramienta como el brazo robótico KUKA KR6 R900 SIXX en partidas de ajedrez. El enfoque principal radica en comprender cómo estas tecnologías pueden ser integradas en diversos entornos culturales. En este proceso, se respetan las normas y la riqueza cultural inherentes al ajedrez, al tiempo que se promueve y fortalece la interacción entre humanos y robots en este contexto.</p>
+          <div class="kpis">
+            <div class="kpi"><b></b><span>Diseñar y construir un tablero de ajedrez electrónico capaz de detectar la posición de sus piezas</span></div>
+            <div class="kpi"><b></b><span>Usar los datos obtenidos del tablero en un motor de ajedrez capaz de determinar la mejor jugada según el nivel de dificultad.</span></div>
+            <div class="kpi"><b></b><span>Realizar el planeamiento de ruta del brazo robótico KUKA basado en la jugada obtenida, buscando un movimiento óptimo, rápido y priorizando la seguridad de sus usuarios.</span></div>
+            <div class="kpi"><b></b><span>Verificar y comprobar si el sistema es capaz de jugar varias partidas de ajedrez, en diferentes niveles de dificultad contra oponentes humanos sin ningún percance. </span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- QUIÉNES SOMOS -->
+  <section id="quienes" class="reveal">
+    <div class="card about">
+      <div class="photo">
+        <img src="quienes.jpg" alt="Equipo Robotic Chess" />
+      </div>
+      <div class="text">
+        <span class="pill">Sobre el equipo</span>
+        <h3>Quiénes somos</h3>
+        <p>Somos un equipo de estudiantes, amantes del ajedrez y entusiastas de robótica que impulsa <b>Robotic Chess</b>, un proyecto educativo para aprender <b>ROS 2</b>, <b>diseño de PCB</b> y <b>visión por computadora</b> a través de un brazo robótico que juega ajedrez.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUÉ HICIMOS -->
+  
+
+  <!-- QUÉ HACEMOS (hoy) -->
+  
+
+  <!-- QUÉ QUEREMOS HACER (futuro) -->
+  
+
+  <!-- RUTA (Pasado, Presente, Futuro) -->
+  <section id="ruta" class="reveal">
+    <div class="card" style="background:transparent;border:0;box-shadow:none;padding:0">
+      <span class="pill">Ruta del proyecto</span>
+      <h3>Pasado, presente y futuro</h3>
+    </div>
+    <div class="timeline">
+      <div id="hicimos" class="stage past">
+        <div class="stage-head"><span>Pasado</span><h4>Qué hicimos</h4></div>
+        <ul class="clean">
+          <li><b>Trabajo con KUKA + ROS:</b> integración y pruebas; captura y registro de posiciones por puerto serie; validación del flujo para el tablero.</li>
+          <li><b>PCB Doble Cara:</b> Integracion completa del circuito.</li>
+        </ul>
+      </div>
+      <div id="hacemos" class="stage present">
+        <div class="stage-head"><span>Presente</span><h4>Qué hacemos</h4></div>
+        <ul class="clean">
+          <li><b>Kit educativo:</b> prototipo de brazo para prácticas de ROS 2 y documentación del pipeline (hardware → drivers → nodos).</li>
+          <li><b>PCB Modular:</b> rediseño de placas doble cara para facilitar mejoras y revisión de errores.</li>
+          <li><b>Software base:</b> Programacion Basica Ros2 mínimos funcionales.</li>
+          <li><b>Tablero:</b> Iterfaz que guarda posiciones del tablero y exporta CSV.</li>
+        </ul>
+      </div>
+      <div id="queremos" class="stage future">
+        <div class="stage-head"><span>Futuro</span><h4>Qué queremos hacer</h4></div>
+        <ul class="clean">
+          <li><b>Visión + IA:</b> insertar cámara y empezar la implementacion de visión para lectura óptima del tablero.</li>
+          <li><b>Hardware propio:</b> diseñar nuestro brazo para no depender del KUKA .</li>
+          <li><b>Comunidad:</b> organizar torneo de ajedrez y publicar paquetes de aprendizaje.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONVOCATORIA / REQUISITOS & OBJETIVOS (desde tus slides) -->
+  <section class="reveal">
+    <div class="card">
+      <span class="pill">Convocatoria</span>
+      <h3>Requisitos y Objetivos</h3>
+      <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+        <div>
+          <h4>Requisitos</h4>
+          <ul class="clean">
+            <li>Responsabilidad</li>
+            <li>Tiempo</li>
+          </ul>
+        </div>
+        <div>
+          <h4>Objetivos</h4>
+          <ul class="clean">
+            <li>Finalización del proyecto</li>
+            <li>Corrección de placas PCB</li>
+            <li>Unión de subsistemas</li>
+            <li>Organización de torneo de ajedrez</li>
+          </ul>
+        </div>
+        <div>
+          <h4>¿Por qué formar parte?</h4>
+          <ul class="clean">
+            <li>Conocimiento</li>
+            <li>Aprender ROS</li>
+            <li>Aprender visión</li>
+            <li>Diseño CAD</li>
+            <li>Diseño de PCB</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALERÍA -->
+  <section id="galeria" class="reveal">
+    <div class="card">
+      <span class="pill">Fotos del proyecto</span>
+      <h3>Galería</h3>
+      <div class="gallery">
+        <figure><img src="foto1.jpg" alt="tablero"/><figcaption>KUKA + ROS 2</figcaption></figure>
+        <figure><img src="foto2.jpg" alt="PCB Modular"/><figcaption>PCB Modular</figcaption></figure>
+        <figure><img src="foto3.jpg" alt="Kit educativo brazo"/><figcaption>Kit educativo</figcaption></figure>
+        <figure><img src="foto4.jpg" alt="Pruebas de tablero"/><figcaption>Pruebas tablero</figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA / CONTACTO -->
+  <section id="contacto" class="reveal">
+    <div class="card">
+      <span class="pill">Súmate</span>
+      <h3>¿Te interesa colaborar o apoyar?</h3>
+      <div class="cta">
+        <a class="btn" href="https://chat.whatsapp.com/HcEhvkgedBYCYt4G4D6NDT?mode=wwt">Quiero sumarme</a>
+        <a class="btn ghost" href="https://wa.me/qr/AAKZZCXII6UQI1" target="_blank" rel="noopener">Canal / Chat</a>
+      </div>
+      <p style="margin-top:8px;color:var(--muted)"></p>
+    </div>
+  </section>
+
+  <footer>
+    <small>© 2025 Robotic Chess. Hecho con para aprender y compartir.</small>
+  </footer>
+
+  <script>
+    // Smooth scroll (por si se pega en algún host)
+    document.querySelectorAll('.menu a').forEach(a=>{
+      a.addEventListener('click',e=>{
+        const id = a.getAttribute('href');
+        if(id.startsWith('#')){e.preventDefault();document.querySelector(id)?.scrollIntoView({behavior:'smooth'});}
+      });
+    });
+    // Revelar al hacer scroll
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(en=>{if(en.isIntersecting){en.target.classList.add('on');io.unobserve(en.target);}})
+    },{threshold:.1});
+    document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+  </script>
+</body>
+</html>
+
