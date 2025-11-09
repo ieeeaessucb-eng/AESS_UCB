@@ -1,18 +1,5 @@
 [
   {
-    "slug": "robotic-chess-kuka-ros2",
-    "title": "Robotic Chess (KUKA + ROS 2)",
-    "date": "2025-11-07",
-    "featured": true,
-    "thumb": "assets/robotic-chess/cover.jpg",
-    "images": [
-      "assets/robotic-chess/1.jpg",
-      "assets/robotic-chess/2.jpg"
-    ],
-    "video": "assets/robotic-chess/demo.mp4",
-    "caption": "PCB modulares, logger de tablero y pipeline ROS 2."
-  },
-  {
     "slug": "alianza-fiab-aess-ucb-DQxZTThj1si",
     "title": "Alianza FIAB × IEEE AESS UCB",
     "date": "2025-10-01",
@@ -61,3 +48,4 @@
     "caption": "Espacio para conocer a la comunidad IEEE Bolivia."
   }
 ]
+
