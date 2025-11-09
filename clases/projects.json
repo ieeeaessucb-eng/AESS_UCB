@@ -1,6 +1,6 @@
 [
   {
-    "slug": "robotic-chess",
+    "slug": "robotic-chess-kuka-ros2",
     "title": "Robotic Chess (KUKA + ROS 2)",
     "date": "2025-11-07",
     "featured": true,
@@ -9,17 +9,55 @@
       "assets/robotic-chess/1.jpg",
       "assets/robotic-chess/2.jpg"
     ],
-    "video": "assets/sce-2-2025-proyectos_lDg4pIKe.mp4",
+    "video": "assets/robotic-chess/demo.mp4",
     "caption": "PCB modulares, logger de tablero y pipeline ROS 2."
   },
   {
-    "slug": "kit-educativo-brazo",
-    "title": "Kit educativo de brazo (ROS 2)",
-    "date": "2025-08-20",
-    "thumb": "assets/kit/cover.jpg",
-    "images": [
-      "assets/kit/1.jpg"
-    ],
-    "caption": "Prototipo para aprender ROS 2 y electrónica."
+    "slug": "alianza-fiab-aess-ucb-DQxZTThj1si",
+    "title": "Alianza FIAB × IEEE AESS UCB",
+    "date": "2025-10-01",
+    "thumb": "assets/ig/DQxZTThj1si/cover.jpg",
+    "images": ["assets/ig/DQxZTThj1si/1.jpg"],
+    "caption": "Alianza para crear oportunidades y proyectos conjuntos."
+  },
+  {
+    "slug": "semana-itec-DQDTm4gDUTK",
+    "title": "Así se vivió la semana de la ITEC",
+    "date": "2025-10-08",
+    "thumb": "assets/ig/DQDTm4gDUTK/cover.jpg",
+    "images": [],
+    "caption": "Recap de actividades y participación AESS UCB."
+  },
+  {
+    "slug": "bienvenida-aess-DN6hlADkbXG",
+    "title": "¡Bienvenidos a IEEE AESS – Presentación",
+    "date": "2025-09-15",
+    "thumb": "assets/ig/DN6hlADkbXG/cover.jpg",
+    "images": [],
+    "caption": "Inicio oficial del capítulo AESS UCB."
+  },
+  {
+    "slug": "ultimo-dia-inscripcion-itec-ucb-2025-DPj_1_7D8UT",
+    "title": "Último día de inscripción ITEC UCB 2025",
+    "date": "2025-10-05",
+    "thumb": "assets/ig/DPj_1_7D8UT/cover.jpg",
+    "images": [],
+    "caption": "Cierre de inscripciones y llamado a la comunidad."
+  },
+  {
+    "slug": "celebracion-fiab-1-anio-DQPajglCbpp",
+    "title": "Celebramos 1 año de FIAB",
+    "date": "2025-10-20",
+    "thumb": "assets/ig/DQPajglCbpp/cover.jpg",
+    "images": [],
+    "caption": "Hitos y colaboración con AESS UCB."
+  },
+  {
+    "slug": "evento-ieee-ucb-networking-DN6koreEpNT",
+    "title": "Evento IEEE UCB – Networking",
+    "date": "2025-09-18",
+    "thumb": "assets/ig/DN6koreEpNT/cover.jpg",
+    "images": [],
+    "caption": "Espacio para conocer a la comunidad IEEE Bolivia."
   }
 ]
