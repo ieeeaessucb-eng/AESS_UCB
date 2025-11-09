@@ -241,7 +241,7 @@ Unimos a los futuros ingenieros que construirán el camino de Bolivia hacia el e
       <span class="pill">Fotos del proyecto</span>
       <h3>Galería</h3>
       <div class="gallery">
-        <figure><img src="foto 1.jpg" alt="tablero"/><figcaption>KUKA + ROS 2</figcaption></figure>
+        <figure><img src="foto1.jpg" alt="tablero"/><figcaption>KUKA + ROS 2</figcaption></figure>
         <figure><img src="foto2.jpg" alt="PCB Modular"/><figcaption>PCB Modular</figcaption></figure>
         <figure><img src="foto3.jpg" alt="Kit educativo brazo"/><figcaption>Kit educativo</figcaption></figure>
         <figure><img src="foto4.jpg" alt="Pruebas de tablero"/><figcaption>Pruebas tablero</figcaption></figure>
@@ -275,14 +275,13 @@ Unimos a los futuros ingenieros que construirán el camino de Bolivia hacia el e
       });
     });
     // Revelar al hacer scroll
-    const io = new IntersectionObserver((entries)=>{
-      entries.forEach(en=>{if(en.isIntersecting){en.target.classList.add('on');io.unobserve(en.target);}})
-    },{threshold:.1});
-    document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
   </script>
+
+  <script type="module" src="./main.js"></script>
+  
+
 </body>
 </html>
-
 
 
 

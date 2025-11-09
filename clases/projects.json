@@ -1,0 +1,25 @@
+[
+  {
+    "slug": "robotic-chess",
+    "title": "Robotic Chess (KUKA + ROS 2)",
+    "date": "2025-11-07",
+    "featured": true,
+    "thumb": "assets/robotic-chess/cover.jpg",
+    "images": [
+      "assets/robotic-chess/1.jpg",
+      "assets/robotic-chess/2.jpg"
+    ],
+    "video": "assets/sce-2-2025-proyectos_lDg4pIKe.mp4",
+    "caption": "PCB modulares, logger de tablero y pipeline ROS 2."
+  },
+  {
+    "slug": "kit-educativo-brazo",
+    "title": "Kit educativo de brazo (ROS 2)",
+    "date": "2025-08-20",
+    "thumb": "assets/kit/cover.jpg",
+    "images": [
+      "assets/kit/1.jpg"
+    ],
+    "caption": "Prototipo para aprender ROS 2 y electrónica."
+  }
+]
