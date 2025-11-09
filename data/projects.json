@@ -1,0 +1,50 @@
+[
+  {
+    "slug": "alianza-fiab-aess-ucb",
+    "title": "Alianza FIAB × IEEE AESS UCB",
+    "date": "2025-10-01",
+    "thumb": "assets/ig/alianza-fiab-aess-ucb/cover.jpg",
+    "images": ["assets/ig/DQxZTThj1si/1.jpg"],
+    "caption": "Alianza para crear oportunidades y proyectos conjuntos."
+  },
+  {
+    "slug": "semana-itec",
+    "title": "Así se vivió la semana de la ITEC",
+    "date": "2025-10-08",
+    "thumb": "assets/ig/ITEC/cover.jpg",
+    "images": [],
+    "caption": "Recap de actividades y participación AESS UCB."
+  },
+  {
+    "slug": "bienvenida-aess-",
+    "title": "¡Bienvenidos a IEEE AESS – Presentación",
+    "date": "2025-09-15",
+    "thumb": "assets/ig/Presentacion.jpg",
+    "images": [],
+    "caption": "Inicio oficial del capítulo AESS UCB."
+  },
+  {
+    "slug": "Taller de robotica en exploraciones espaciales",
+    "title": "Taller de robotica en exploraciones espaciales",
+    "date": "2025-10-05",
+    "thumb": "assets/ig/Taller.jpg",
+    "images": [],
+    "caption": "Junto con RAS UCB, realizamos un taller de robótica espacial."
+  },
+  {
+    "slug": "AESS",
+    "title": "AESS",
+    "date": "2025-12-8",
+    "thumb": "assets/ig/AESS/cover.jpg",
+    "images": [],
+    "caption": "AESS UCB."
+  },
+  {
+    "slug": "evento-ieee-ucb-networking",
+    "title": "Evento IEEE UCB – Networking",
+    "date": "2025-11-18",
+    "thumb": "assets/ig/networking/cover.jpg",
+    "images": [],
+    "caption": "Espacio para conocer a todas las comunidades espaciales de Bolivia"
+  }
+]

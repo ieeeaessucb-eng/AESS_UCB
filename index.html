@@ -72,12 +72,58 @@
     .stage h4{margin:.25rem 0 .5rem}
     .stage ul.clean{margin-top:.5rem}
 
-    /* --- GALLERY --- */
-    .gallery{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-    @media (min-width:800px){.gallery{grid-template-columns:repeat(4,1fr)}}
-    .gallery figure{margin:0;position:relative}
-    .gallery img{width:100%;height:160px;object-fit:cover;border-radius:12px;border:1px solid rgba(255,255,255,.08)}
-    .gallery figcaption{position:absolute;left:8px;bottom:8px;background:rgba(0,0,0,.45);padding:4px 8px;border-radius:8px;font-size:12px}
+    /* --- GALLERY (featured + 3 thumbs) --- */
+    /* === GALLERY (1 destacado grande + grid de 3 columnas para el resto) === */
+    .gallery{display:block}
+
+    /* ---- DESTACADO ARRIBA ---- */
+    .gallery-featured-block{margin-bottom:16px}
+    .gallery-featured-block .card.big{
+    background:linear-gradient(180deg,var(--card),var(--card2));
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:18px; padding:16px; box-shadow:var(--shadow);
+    }
+    .gallery-featured-block .card.big img{
+    width:100%; height:clamp(260px, 52vw, 420px);
+    object-fit:cover; display:block; border-radius:12px;
+    }
+    .gallery-featured-block .card.big figcaption{padding:10px 4px 0 4px}
+    .gallery-featured-block .card.big h4{margin:.25rem 0 .25rem}
+
+    /* ---- GRID DE MINIATURAS (todas las demás, de 3 en 3) ---- */
+    .gallery-thumbs{
+    display:grid;
+    grid-template-columns:repeat(1,1fr);
+    gap:12px;
+    }
+    @media(min-width:780px){
+    .gallery-thumbs{ grid-template-columns:repeat(3,1fr); }
+    }
+    .gallery-thumbs .card.thumb{
+    background:linear-gradient(180deg,var(--card),var(--card2));
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:14px; overflow:hidden; box-shadow:var(--shadow);
+    }
+    .gallery-thumbs .card.thumb img{
+    width:100%; height:160px; object-fit:cover; display:block;
+    }
+    .gallery-thumbs .card.thumb figcaption{ padding:10px }
+    .gallery-thumbs .card.thumb h4{ margin:.25rem 0 .25rem; font-size:15px }
+    .gallery-thumbs .card.thumb p{ margin:0; color:var(--muted); font-size:13px }
+
+    /* ---- Reset de estilos viejos (evita overlays) ---- */
+    .gallery figure{position:static}
+    .gallery figure figcaption{
+    position:static !important;
+    background:transparent !important;
+    left:auto; bottom:auto;
+    padding:10px 0 0 0; font-size:13px;
+    }
+
+
+
+
+
 
     /* --- SLIDES --- */
     .slides{display:grid;grid-template-columns:1fr;gap:12px}
@@ -119,8 +165,8 @@
         <div>
           <!-- Video principal (usa el que ya tienes cargado) -->
           <video controls autoplay muted playsinline loop poster="assets/poster.jpg">
-            <source src="assets/sce-2-2025-proyectos_lDg4pIKe.mp4" type="video/mp4" />
-            <source src="sce-2-2025-proyectos_lDg4pIKe.mp4" type="video/mp4" />
+            <source src="assets/ITEC-2025.mp4" type="video/mp4" />
+            <source src="ITEC-2025.mp4" type="video/mp4" />
             Tu navegador no soporta video HTML5.
           </video>
         </div>
@@ -199,6 +245,21 @@ Unimos a los futuros ingenieros que construirán el camino de Bolivia hacia el e
     </div>
   </section>
 
+  
+  <!-- GALERÍA -->
+  <section id="galeria" class="reveal">
+    <div class="card">
+      <span class="pill">Fotos del proyecto</span>
+      <h3>Galería</h3>
+      <div class="gallery">
+        <figure><img src="foto1.jpg" alt="tablero"/><figcaption>KUKA + ROS 2</figcaption></figure>
+        <figure><img src="foto2.jpg" alt="PCB Modular"/><figcaption>PCB Modular</figcaption></figure>
+        <figure><img src="foto3.jpg" alt="Kit educativo brazo"/><figcaption>Kit educativo</figcaption></figure>
+        <figure><img src="foto4.jpg" alt="Pruebas de tablero"/><figcaption>Pruebas tablero</figcaption></figure>
+      </div>
+    </div>
+  </section>
+
   <!-- CONVOCATORIA / REQUISITOS & OBJETIVOS (desde tus slides) -->
   <section class="reveal">
     <div class="card">
@@ -231,20 +292,6 @@ Unimos a los futuros ingenieros que construirán el camino de Bolivia hacia el e
             <li>Diseño de PCB</li>
           </ul>
         </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- GALERÍA -->
-  <section id="galeria" class="reveal">
-    <div class="card">
-      <span class="pill">Fotos del proyecto</span>
-      <h3>Galería</h3>
-      <div class="gallery">
-        <figure><img src="foto1.jpg" alt="tablero"/><figcaption>KUKA + ROS 2</figcaption></figure>
-        <figure><img src="foto2.jpg" alt="PCB Modular"/><figcaption>PCB Modular</figcaption></figure>
-        <figure><img src="foto3.jpg" alt="Kit educativo brazo"/><figcaption>Kit educativo</figcaption></figure>
-        <figure><img src="foto4.jpg" alt="Pruebas de tablero"/><figcaption>Pruebas tablero</figcaption></figure>
       </div>
     </div>
   </section>

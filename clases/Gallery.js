@@ -1,6 +1,9 @@
 // clases/Gallery.js
 export class Gallery {
-  constructor(rootSelector = '#galeria .gallery', dataUrl = './data/projects.json') {
+  constructor(
+    rootSelector = '#galeria .gallery',
+    dataUrl = './data/projects.json'
+  ) {
     this.root = document.querySelector(rootSelector);
     this.dataUrl = dataUrl;
   }
@@ -10,57 +13,107 @@ export class Gallery {
 
     let projects = [];
     try {
-      // cache-bust simple para que tome cambios recientes
-      const res = await fetch(this.dataUrl + `?v=${Date.now()}`);
+      const res = await fetch(this.dataUrl + `?v=${Date.now()}`, { cache: 'no-store' });
       projects = await res.json();
     } catch (e) {
-      this.root.innerHTML = `<p style="color:var(--muted)">No pude cargar la galería. Verifica <code>${this.dataUrl}</code>.</p>`;
-      return;
+      console.warn('[Gallery] No pude cargar', this.dataUrl, e);
+      return; // deja cualquier HTML estático que haya
     }
-    if (!Array.isArray(projects) || projects.length === 0) {
-      this.root.innerHTML = `<p style="color:var(--muted)">Aún no hay proyectos en el JSON.</p>`;
+
+    // Validación mínima
+    const isProject = p => p && typeof p.title === 'string' && typeof p.date === 'string';
+    projects = Array.isArray(projects) ? projects.filter(isProject) : [];
+    if (!projects.length) {
+      this.root.innerHTML = '<p style="color:var(--muted)">Pronto publicaremos nuestros proyectos ✨</p>';
       return;
     }
 
-    // Destacado: primero los featured, luego por fecha desc
+    // Orden general por fecha (nuevo primero)
     const byDateDesc = (a, b) => (a.date < b.date ? 1 : -1);
-    const sorted = [...projects].sort((a, b) => {
-      if (!!b.featured - !!a.featured !== 0) return (!!b.featured - !!a.featured);
-      return byDateDesc(a, b);
-    });
+    const ordered = [...projects].sort(byDateDesc);
 
-    const featured = sorted[0];
-    const rest = sorted.slice(1);
+    // Destacado: primero featured (más reciente), si no, el más reciente por fecha
+    const featuredPool = ordered.filter(p => !!p.featured);
+    const featured = (featuredPool.length ? featuredPool : ordered)[0];
+
+    // Resto: TODOS menos el destacado, en orden por fecha (se verán 3 por fila)
+    const rest = ordered.filter(p => p !== featured);
 
     this.root.innerHTML = `
-      <div class="gallery-featured">
-        ${this._card(featured, true)}
+      <div class="gallery-featured-block">
+        ${this._bigCard(featured)}
       </div>
-      <div class="gallery-grid">
-        ${rest.map(p => this._card(p)).join('')}
+      <div class="gallery-thumbs">
+        ${rest.map(p => this._thumbCard(p)).join('')}
       </div>
     `;
   }
 
-  _card(p, isFeatured = false) {
-    const img = p.thumb || (p.images && p.images[0]) || '';
-    const btnVideo = p.video ? `<a class="btn ghost" href="${p.video}" target="_blank" rel="noopener">Ver video</a>` : '';
+  // ---- tarjetas ----------
+  _bigCard(p) {
+    const title = this._esc(p.title || 'Proyecto');
+    const date  = this._fmtDate(p.date);
+    const img   = p.thumb || (p.images && p.images[0]);
+    const videoBtn = p.video
+      ? `<a class="btn ghost" href="${this._esc(p.video)}" target="_blank" rel="noopener">Ver video</a>`
+      : '';
+
     return `
-      <figure class="card ${isFeatured ? 'featured' : ''}">
-        ${img ? `<img src="${img}" alt="${this._esc(p.title)}">` : ''}
+      <figure class="card big">
+        ${this._imgTag(img, title, { height: 'clamp(260px, 52vw, 420px)' })}
         <figcaption>
-          <h4>${this._esc(p.title || 'Proyecto')}</h4>
+          <h4>${title}</h4>
           <p>${this._esc(p.caption || '')}</p>
-          <div class="meta">
-            <span>${this._esc(p.date || '')}</span>
-            ${btnVideo}
-          </div>
+          <div class="meta"><span>${this._esc(date)}</span>${videoBtn}</div>
         </figcaption>
       </figure>
     `;
   }
 
-  _esc(s='') {
-    return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+  _thumbCard(p) {
+    const title = this._esc(p.title || 'Proyecto');
+    const date  = this._fmtDate(p.date);
+    const img   = p.thumb || (p.images && p.images[0]);
+    return `
+      <figure class="card thumb">
+        ${this._imgTag(img, title, { height: '160px' })}
+        <figcaption>
+          <h4>${title}</h4>
+          <p>${this._esc(p.caption || '')}</p>
+          <div class="meta"><span>${this._esc(date)}</span></div>
+        </figcaption>
+      </figure>
+    `;
+  }
+
+  // ---- utilidades ----------
+  _imgTag(src, alt, { height } = {}) {
+    if (src) {
+      return `<img src="${this._esc(src)}" alt="${this._esc(alt)}"
+                   loading="lazy" decoding="async"
+                   style="width:100%;height:${height};object-fit:cover;display:block;border-radius:12px">`;
+    }
+    const svg = this._svgPlaceholder(alt);
+    return `<img alt="${this._esc(alt)}" loading="lazy" decoding="async"
+                 src="data:image/svg+xml,${encodeURIComponent(svg)}"
+                 style="width:100%;height:${height};object-fit:cover;display:block;border-radius:12px">`;
+  }
+
+  _fmtDate(iso) {
+    if (!iso) return '';
+    const d = new Date(iso);
+    if (Number.isNaN(d.getTime())) return iso;
+    const y = d.getFullYear(), m = String(d.getMonth()+1).padStart(2,'0'), dd = String(d.getDate()).padStart(2,'0');
+    return `${y}-${m}-${dd}`;
+  }
+  _esc(s=''){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+  _svgPlaceholder(text=''){
+    const label = (text.length>28)?text.slice(0,25)+'…':text;
+    return `<svg xmlns='http://www.w3.org/2000/svg' width='1200' height='675'>
+      <rect width='100%' height='100%' fill='#111418'/>
+      <text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle'
+            font-family='system-ui,Segoe UI,Roboto,Arial' font-size='28' fill='#b2bdc7'>${label}</text>
+    </svg>`;
   }
 }
+export default Gallery;
